@@ -26,5 +26,9 @@
     "mongoose": "^5.0.14",
     "morgan": "^1.7.0",
     "superlogin": "^0.6.1"
+  },
+  "dependencies": {
+    "reflect-metadata": "^0.1.12",
+    "typegoose": "^5.0.0"
   }
 }

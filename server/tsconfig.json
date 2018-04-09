@@ -4,8 +4,10 @@
     "module": "commonjs",
     "removeComments": true,
     "sourceMap": true,
-    "target": "es5",
-    "outDir": "build"
+    "target": "es6",
+    "outDir": "build",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
   "include": [
     "src/**/*.ts"

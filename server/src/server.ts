@@ -7,6 +7,7 @@ import * as bodyParser from 'body-parser';              // pull information from
 import * as methodOverride from 'method-override';      // simulate DELETE and PUT (express4)
 import * as cors from 'cors';
 import {Review} from './schemas/review';
+import { model as User, User as UserType } from './schemas/user';
 
 // Configuration
 mongoose.connect('mongodb://localhost/reviewking');
@@ -65,12 +66,43 @@ app.delete('/api/reviews/:review_id', function (req, res) {
     Review.remove({
         _id: req.params.review_id
     }).then( result => {
-        
+
     }).catch(err => {
         res.send(err);
     });
 });
 
+// Get user
+app.get('/api/users', function (req, res) {
+
+    console.log("fetching users");
+
+    // use mongoose to get all reviews in the database
+    User.find().then(results => {
+        res.json(results);
+    }).catch(err => {
+        res.send(err);
+    });
+});
+
+// create user and send back all users after creation
+app.post('/api/users', function (req, res) {
+    console.log("creating user");
+    console.log("BODY", req.body);
+
+    User.create({
+        name: req.body.name,
+        surname: req.body.surname
+    }).then(results => {
+        User.find().then(results => {
+            res.json(results);
+        }).catch(err => {
+            res.send(err);
+        });
+    }).catch(err => {
+       res.send(err);
+    });
+});
 
 // listen (start app with node server.js) ======================================
 app.listen(8080);
