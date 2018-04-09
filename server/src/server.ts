@@ -2,7 +2,6 @@
 import * as express from 'express';
 let app = express();                                    // create our app w/ express
 import * as mongoose from 'mongoose';                   // mongoose for mongodb
-import {Schema} from "mongoose";
 import * as morgan from 'morgan';                       // log requests to the console (express4)
 import * as bodyParser from 'body-parser';              // pull information from HTML POST (express4)
 import * as methodOverride from 'method-override';      // simulate DELETE and PUT (express4)
@@ -10,7 +9,7 @@ import * as cors from 'cors';
 import {Review} from './schemas/review';
 
 // Configuration
-mongoose.connect('mongodb://localhost/reviewking', {useMongoClient: true});
+mongoose.connect('mongodb://localhost/reviewking');
 
 app.use(morgan('dev'));                                          // log every request to the console
 app.use(bodyParser.urlencoded({'extended': true}));             // parse application/x-www-form-urlencoded
@@ -34,14 +33,10 @@ app.get('/api/reviews', function (req, res) {
     console.log("fetching reviews");
 
     // use mongoose to get all reviews in the database
-    Review.find(function (err, reviews) {
-
-        // if there is an error retrieving, send the error. nothing after res.send(err) will execute
-        if (err) {
-            return res.send(err);
-        }
-
-        res.json(reviews); // return all reviews in JSON format
+    Review.find().then(results => {
+        res.json(results);
+    }).catch(err => {
+        res.send(err);
     });
 });
 
@@ -50,33 +45,29 @@ app.post('/api/reviews', function (req, res) {
     console.log("creating review");
     console.log("BODY", req.body);
 
-    // create a review, information comes from request from Ionic
     Review.create({
         title: req.body.title,
         description: req.body.description,
-        rating: req.body.rating,
-        done: false
-    }, function (err: any, review: any) {
-        if (err) {
+        rating: req.body.rating
+    }).then(review => {
+        Review.find().then(results => {
+            res.json(results);
+        }).catch(err => {
             res.send(err);
-        }
-
-        // get and return all the reviews after you create another
-        Review.find(function (err: any, reviews: any) {
-            if (err)
-                return res.send(err);
-            res.json(reviews);
         });
+    }).catch(err => {
+        res.send(err);
     });
-
 });
 
 // delete a review
 app.delete('/api/reviews/:review_id', function (req, res) {
     Review.remove({
         _id: req.params.review_id
-    }, function (err: any) {
-
+    }).then( result => {
+        
+    }).catch(err => {
+        res.send(err);
     });
 });
 
