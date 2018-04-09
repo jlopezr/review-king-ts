@@ -1,19 +1,20 @@
 // Set up
-var express  = require('express');
-var app      = express();                           // create our app w/ express
-var mongoose = require('mongoose');                 // mongoose for mongodb
-var morgan = require('morgan');                     // log requests to the console (express4)
-var bodyParser = require('body-parser');            // pull information from HTML POST (express4)
-var methodOverride = require('method-override');    // simulate DELETE and PUT (express4)
-var cors = require('cors');
+import * as express from 'express';
+let app = express();                                    // create our app w/ express
+import * as mongoose from 'mongoose';                   // mongoose for mongodb
+import {Schema} from "mongoose";
+import * as morgan from 'morgan';                       // log requests to the console (express4)
+import * as bodyParser from 'body-parser';              // pull information from HTML POST (express4)
+import * as methodOverride from 'method-override';      // simulate DELETE and PUT (express4)
+import * as cors from 'cors';
 
 // Configuration
 mongoose.connect('mongodb://localhost/reviewking');
 
 app.use(morgan('dev'));                                         // log every request to the console
-app.use(bodyParser.urlencoded({'extended':'true'}));            // parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({'extended': true}));            // parse application/x-www-form-urlencoded
 app.use(bodyParser.json());                                     // parse application/json
-//app.use(bodyParser.json({ type: 'application/vnd.api+json' })); // parse application/vnd.api+json as json
+app.use(bodyParser.json({ type: 'application/vnd.api+json' })); // parse application/vnd.api+json as json
 app.use(methodOverride());
 app.use(cors());
 
@@ -25,11 +26,13 @@ app.use(function(req, res, next) {
 });
 
 // Models
-var Review = mongoose.model('Review', {
-    title: String,
-    description: String,
-    rating: Number
-});
+let Review = mongoose.model('Review',
+    new Schema({
+        title: String,
+        description: String,
+        rating: Number
+    })
+);
 
 // Routes
 
@@ -42,8 +45,9 @@ var Review = mongoose.model('Review', {
         Review.find(function(err, reviews) {
 
             // if there is an error retrieving, send the error. nothing after res.send(err) will execute
-            if (err)
-                res.send(err)
+            if (err) {
+                return res.send(err);
+            }
 
             res.json(reviews); // return all reviews in JSON format
         });
@@ -60,14 +64,15 @@ var Review = mongoose.model('Review', {
             description : req.body.description,
             rating: req.body.rating,
             done : false
-        }, function(err, review) {
-            if (err)
+        }, function(err: any, review: any) {
+            if (err) {
                 res.send(err);
+            }
 
             // get and return all the reviews after you create another
-            Review.find(function(err, reviews) {
+            Review.find(function(err: any, reviews: any) {
                 if (err)
-                    res.send(err)
+                    return res.send(err);
                 res.json(reviews);
             });
         });
@@ -78,7 +83,7 @@ var Review = mongoose.model('Review', {
     app.delete('/api/reviews/:review_id', function(req, res) {
         Review.remove({
             _id : req.params.review_id
-        }, function(err, review) {
+        }, function(err: any) {
 
         });
     });
