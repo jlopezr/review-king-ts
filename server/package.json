@@ -16,7 +16,11 @@
     "@types/method-override": "0.0.31",
     "@types/mongoose": "^5.0.9",
     "@types/morgan": "^1.7.35",
-    "@types/node": "^9.6.2",
+    "@types/node": "^9.6.2"
+  },
+  "dependencies": {
+    "reflect-metadata": "^0.1.12",
+    "typegoose": "^5.0.0",
     "body-parser": "^1.15.2",
     "cors": "^2.8.0",
     "del": "2.2.0",
@@ -26,9 +30,5 @@
     "mongoose": "^5.0.14",
     "morgan": "^1.7.0",
     "superlogin": "^0.6.1"
-  },
-  "dependencies": {
-    "reflect-metadata": "^0.1.12",
-    "typegoose": "^5.0.0"
   }
 }
