@@ -10,7 +10,7 @@ import {Review} from './schemas/review';
 import { model as User, User as UserType } from './schemas/user';
 
 // Configuration
-mongoose.connect('mongodb://localhost/reviewking');
+mongoose.connect('mongodb://localhost/reviewking', {useNewUrlParser: true});
 
 app.use(morgan('dev'));                                          // log every request to the console
 app.use(bodyParser.urlencoded({'extended': true}));             // parse application/x-www-form-urlencoded
