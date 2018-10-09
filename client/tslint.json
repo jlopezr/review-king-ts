@@ -1,9 +1,9 @@
 {
   "rules": {
     "no-duplicate-variable": true,
-    "no-unused-variable": [
-      true
-    ]
+    "no-any": true,
+    "typedef": [true, "call-signature", "parameter", "member-variable-declaration"]
+
   },
   "rulesDirectory": [
     "node_modules/tslint-eslint-rules/dist/rules"

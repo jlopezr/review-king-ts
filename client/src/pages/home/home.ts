@@ -1,7 +1,7 @@
 import {Component} from "@angular/core";
 import {NavController, ModalController} from 'ionic-angular';
 import {AddReviewPage} from '../add-review/add-review';
-import {Reviews} from '../../providers/reviews/reviews';
+import {Reviews, Review} from '../../providers/reviews/reviews';
 
 @Component({
   selector: 'home-page',
@@ -9,19 +9,19 @@ import {Reviews} from '../../providers/reviews/reviews';
 })
 export class HomePage {
 
-  reviews: any;
+  reviews: Review[];
 
   constructor(public nav: NavController, public reviewService: Reviews, public modalCtrl: ModalController) {
   }
 
-  ionViewDidLoad() {
+  ionViewDidLoad():void {
     this.reviewService.getReviews().then((data) => {
       console.log(data);
-      this.reviews = data;
+      this.reviews = data as Review[];
     });
   }
 
-  addReview() {
+  addReview():void {
     let modal = this.modalCtrl.create(AddReviewPage);
 
     modal.onDidDismiss(review => {
@@ -35,7 +35,7 @@ export class HomePage {
 
   }
 
-  deleteReview(review) {
+  deleteReview(review:Review):void {
     //Remove locally
     let index = this.reviews.indexOf(review);
 
